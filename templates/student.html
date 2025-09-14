@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="card">
+  <div class="title-row">
+    <h2>Student Record</h2>
+    <a class="btn" href="{{ url_for('student_pdf', roll=student['roll_no']) }}">Download PDF</a>
+  </div>
+  <div class="grid">
+    <div><strong>Name:</strong> {{ student['name'] }}</div>
+    <div><strong>Roll No:</strong> {{ student['roll_no'] }}</div>
+    <div><strong>Email:</strong> {{ student['email'] or '-' }}</div>
+    <div><strong>Phone:</strong> {{ student['phone'] or '-' }}</div>
+    <div><strong>Father:</strong> {{ student['father_name'] or '-' }}</div>
+    <div><strong>Father Phone:</strong> {{ student['father_phone'] or '-' }}</div>
+    <div><strong>Semester:</strong> {{ student['semester'] or '-' }}</div>
+  </div>
+</section>
+
+<section class="card">
+  <h3>Result (By Exam)</h3>
+  {% if marks_rows %}
+  <div class="scroll-x">
+    <table class="grade-sheet">
+      <thead>
+        <tr>
+          {% for h in marks_headers %}<th>{{ h }}</th>{% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in marks_rows %}
+          <tr>
+            {% for h in marks_headers %}
+              <td>{{ r.get(h, '') }}</td>
+            {% endfor %}
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}<p class="muted">No marks available.</p>{% endif %}
+</section>
+
+<section class="card">
+  <h3>Attendance (By Subject)</h3>
+  {% if att_rows %}
+  <div class="scroll-x">
+    <table class="grade-sheet">
+      <thead>
+        <tr>
+          {% for h in att_headers %}<th>{{ h }}</th>{% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in att_rows %}
+          <tr>
+            {% for h in att_headers %}
+              <td>{{ r.get(h, '') }}</td>
+            {% endfor %}
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}<p class="muted">No attendance data.</p>{% endif %}
+</section>
+
+<section class="card">
+  <h3>Remarks</h3>
+  {% if remarks %}
+    <ul class="remarks">
+      {% for r in remarks %}
+        <li><span class="muted">[{{ r['created_at'] }}] {{ r['author_username'] }}:</span> {{ r['remark_text'] }}</li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p class="muted">No remarks yet.</p>
+  {% endif %}
+  <form action="{{ url_for('add_remark', roll_no=student['roll_no']) }}" method="post" class="row" style="margin-top:10px">
+    <input name="remark" placeholder="Add a remark..." required>
+    <button type="submit">Add</button>
+  </form>
+</section>
+{% endblock %}

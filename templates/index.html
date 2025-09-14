@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="hero card">
+  <h2>Internal Academic Records</h2>
+  <p class="muted">Admin uploads Students, Attendance, and Marks in separate Excel/CSV files. Search a student to view result-style sheets.</p>
+  <form action="{{ url_for('search') }}" method="get" class="row">
+    <input name="roll" placeholder="Enter Roll Number" required>
+    <button type="submit">Open Record</button>
+  </form>
+</section>
+{% endblock %}

@@ -1,0 +1,7 @@
+roll_no,exam,subject,max_marks,marks_obtained,credits,semester
+CSE23001,Midterm,DBMS,50,41,4,5
+CSE23001,Midterm,OS,50,39,4,5
+CSE23001,Final,DBMS,100,82,4,5
+CSE23001,Final,OS,100,78,4,5
+CSE23002,Midterm,DBMS,50,45,4,5
+CSE23002,Midterm,OS,50,36,4,5

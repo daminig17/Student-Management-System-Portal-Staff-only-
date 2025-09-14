@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="card">
+  <h2>Admin — Single Uploads</h2>
+  <div class="grid three">
+    <div class="card">
+      <h3>Upload Students</h3>
+      <form action="{{ url_for('upload_students') }}" method="post" enctype="multipart/form-data" class="col">
+        <input type="file" name="students_file" accept=".xlsx,.csv" required>
+        <button type="submit">Upload Students</button>
+      </form>
+      <details style="margin-top:8px">
+        <summary>Excel/CSV Template</summary>
+        <div class="scroll-x">
+          <table>
+            <thead><tr>{% for c in student_cols %}<th>{{ c }}</th>{% endfor %}</tr></thead>
+            <tbody>
+              <tr>{% for c in student_cols %}<td>{{ c | upper }}</td>{% endfor %}</tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="row" style="margin-top:8px">
+          <a class="btn subtle" href="{{ url_for('download_template', kind='Students_template.xlsx') }}">Download .xlsx</a>
+          <a class="btn subtle" href="{{ url_for('download_template', kind='Students_template.csv') }}">Download .csv</a>
+        </div>
+        <p class="muted">Columns: roll_no, name, email, phone, father_name, father_phone, semester.</p>
+      </details>
+    </div>
+    <div class="card">
+      <h3>Upload Attendance</h3>
+      <form action="{{ url_for('upload_attendance') }}" method="post" enctype="multipart/form-data" class="col">
+        <input type="file" name="attendance_file" accept=".xlsx,.csv" required>
+        <button type="submit">Upload Attendance</button>
+      </form>
+      <details style="margin-top:8px">
+        <summary>Excel/CSV Template</summary>
+        <div class="scroll-x">
+          <table>
+            <thead><tr>{% for c in attendance_cols %}<th>{{ c }}</th>{% endfor %}</tr></thead>
+            <tbody>
+              <tr>{% for c in attendance_cols %}<td>{{ c | upper }}</td>{% endfor %}</tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="row" style="margin-top:8px">
+          <a class="btn subtle" href="{{ url_for('download_template', kind='Attendance_template.xlsx') }}">Download .xlsx</a>
+          <a class="btn subtle" href="{{ url_for('download_template', kind='Attendance_template.csv') }}">Download .csv</a>
+        </div>
+      </details>
+    </div>
+    <div class="card">
+      <h3>Upload Marks</h3>
+      <form action="{{ url_for('upload_marks') }}" method="post" enctype="multipart/form-data" class="col">
+        <input type="file" name="marks_file" accept=".xlsx,.csv" required>
+        <button type="submit">Upload Marks</button>
+      </form>
+      <details style="margin-top:8px">
+        <summary>Excel/CSV Template</summary>
+        <div class="scroll-x">
+          <table>
+            <thead><tr>{% for c in marks_cols %}<th>{{ c }}</th>{% endfor %}</tr></thead>
+            <tbody>
+              <tr>{% for c in marks_cols %}<td>{{ c | upper }}</td>{% endfor %}</tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="row" style="margin-top:8px">
+          <a class="btn subtle" href="{{ url_for('download_template', kind='Marks_template.xlsx') }}">Download .xlsx</a>
+          <a class="btn subtle" href="{{ url_for('download_template', kind='Marks_template.csv') }}">Download .csv</a>
+        </div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section class="card">
+  <h3>Database Stats</h3>
+  <div class="grid">
+    <div class="stat">Students<br><strong>{{ stats.students }}</strong></div>
+    <div class="stat">Attendance Rows<br><strong>{{ stats.attendance }}</strong></div>
+    <div class="stat">Marks Rows<br><strong>{{ stats.marks }}</strong></div>
+  </div>
+</section>
+
+<section class="card">
+  <h3>Recent Uploads</h3>
+  {% if uploads %}
+  <table>
+    <thead><tr><th>ID</th><th>Type</th><th>File</th><th>Rows</th><th>Uploaded By</th><th>When</th><th></th></tr></thead>
+    <tbody>
+      {% for u in uploads %}
+      <tr>
+        <td>{{ u['id'] }}</td>
+        <td>{{ u['upload_type'] }}</td>
+        <td title="{{ u['filename'] }}">{{ u['filename'] }}</td>
+        <td>{{ u['row_count'] }}</td>
+        <td>{{ u['uploader_username'] }}</td>
+        <td>{{ u['created_at'] }}</td>
+        <td>
+          <form method="post" action="{{ url_for('delete_upload_route', upload_id=u['id']) }}" onsubmit="return confirm('Delete upload #{{u['id']}} and rollback its data?')">
+            <button class="danger" type="submit">Delete</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+    <p class="muted">No uploads yet.</p>
+  {% endif %}
+</section>
+{% endblock %}

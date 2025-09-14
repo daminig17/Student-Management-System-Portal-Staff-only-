@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CSE Records Portal</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header class="topbar glass">
+   <div class="brand"> 
+    <img src="{{ url_for('static', filename='logo.jpg') }}" alt="MVN Logo" class="logo" /> 
+    <div class="brand-text"> 
+      <h1>MVN UNIVERSITY</h1> 
+      <p>Department of Computer Science & Engineering</p>
+     </div>
+     </div>
+    <nav>
+      <a href="{{ url_for('home') }}">Home</a>
+      {% if session.get('role') == 'admin' %}
+        <a href="{{ url_for('admin_imports') }}">Admin</a>
+        <a class="btn subtle" href="{{ url_for('admin_logout') }}">Logout</a>
+      {% else %}
+        <a class="btn subtle" href="{{ url_for('admin_login') }}">Admin Login</a>
+      {% endif %}
+    </nav>
+  </header>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="flash">
+        {% for cat, msg in messages %}
+          <div class="toast {{ cat }}">{{ msg }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <main class="container">
+    {% block content %}{% endblock %}
+  </main>
+  <footer class="footer">© MVN University — Department of CSE (Damini , Adesh) </footer>
+</body>
+</html>
